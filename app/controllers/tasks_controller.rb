@@ -13,7 +13,8 @@ class TasksController < ApplicationController
     @task.user = current_user
 
     if @task.save
-      redirect_to @task, notice: 'Task was successfully created.'
+      flash[:alert] = 'Task was successfully saved.'
+      redirect_to @task
     else
       render :new
     end
@@ -21,6 +22,21 @@ class TasksController < ApplicationController
 
   def show
     @task = Task.find(params[:id])
+  end
+
+  def edit
+    @task = Task.find(params[:id])
+  end
+
+  def update
+    @task = Task.find(params[:id])
+
+    if @task.update(task_params)
+      flash[:alert] = 'Task was successfully updated.'
+      redirect_to @task
+    else
+      render :edit
+    end
   end
 
   private
