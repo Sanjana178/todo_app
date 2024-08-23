@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @tasks = Task.all
@@ -10,9 +11,10 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.user = current_user
 
     if @task.save
+      @task.user_ids = params[:task][:user_ids] if params[:task][:user_ids].present? # Assign multiple users
+
       flash[:alert] = 'Task was successfully saved.'
       redirect_to @task
     else
@@ -49,6 +51,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :status, :due_date)
+    params.require(:task).permit(:title, :description, :status, :due_date, user_ids: [])
   end
 end

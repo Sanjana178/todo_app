@@ -1,28 +1,47 @@
-<h1>All Tasks</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Status</th>
-      <th>Due Date</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @tasks.each do |task| %>
-      <tr>
-        <td><%= task.title %></td>
-        <td><%= task.description %></td>
-        <td><%= task.status %></td>
-        <td><%= task.due_date.strftime("%B %d, %Y %I:%M %p") %></td>
-        <td><%= link_to 'Show', task_path(task) %></td>
-        <td><%= button_to 'Delete', task, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= link_to 'New Task', new_task_path %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Task List</title>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+  </head>
+  <body>
+    <div class="contaier">
+      <h1>Tasks</h1>
+      <table align="center" class="task-table">
+        <thead align="center">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Users</th>
+            <th colspan="3">Actions</th>
+          </tr>
+        </thead>
+        <tbody align="center">
+          <% @tasks.each do |task| %>
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><%= task.title %></td>
+              <td style="border: 1px solid #ddd; padding: 8px;"><%= task.description %></td>
+              <td style="border: 1px solid #ddd; padding: 8px;"><%= task.status %></td>
+              <td style="border: 1px solid #ddd; padding: 8px;"><%= task.due_date.strftime('%B %d, %Y') %></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">
+                <%= task.users.map(&:name).join(", ") %>
+              </td>
+              <td style="border: 1px solid #ddd; padding: 8px;">
+                <%= link_to 'Show', task_path(task), class: "btn btn-info" %>
+              </td>
+              <td style="border: 1px solid #ddd; padding: 8px;">
+                <%= link_to 'Edit', edit_task_path(task), class: "btn btn-warning" %>
+              </td>
+              <td style="border: 1px solid #ddd; padding: 8px;">
+                <%= button_to 'Delete', task_path(task), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= link_to 'New Task', new_task_path, class: 'btn btn-primary' %>
+    </div>
+  </body>
+</html>
