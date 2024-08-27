@@ -7,6 +7,7 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    @task.comments.build(user_id: current_user.id)  # Initialize comment with current user's ID
   end
 
   def create
@@ -24,10 +25,16 @@ class TasksController < ApplicationController
 
   def show
     @task = Task.find(params[:id])
+    if @task.nil?
+      redirect_to tasks_path, alert: "Task not found."
+    else
+      @comments = @task.comments
+    end
   end
 
   def edit
     @task = Task.find(params[:id])
+    @task.comments.build(user_id: current_user.id) if @task.comments.empty?  # Initialize comment if none exist
   end
 
   def update
@@ -51,6 +58,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :status, :due_date, user_ids: [])
+    params.require(:task).permit(:title, :description, :status, :due_date, user_ids: [], comments_attributes: [:id, :content, :user_id, :_destroy])
   end
 end

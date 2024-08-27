@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+  <% if user_signed_in? %>
+  <p>Welcome, <%= current_user.name %>!</p>
+<% else %>
+  <p>Please <%= link_to 'sign in', new_user_session_path %> to view this content.</p>
+<% end %>
   <head>
     <title>Task List</title>
     <%= stylesheet_link_tag 'application', media: 'all' %>
@@ -15,6 +20,7 @@
             <th>Status</th>
             <th>Due Date</th>
             <th>Users</th>
+            <th>Comments</th>
             <th colspan="3">Actions</th>
           </tr>
         </thead>
@@ -27,6 +33,13 @@
               <td style="border: 1px solid #ddd; padding: 8px;"><%= task.due_date.strftime('%B %d, %Y') %></td>
               <td style="border: 1px solid #ddd; padding: 8px;">
                 <%= task.users.map(&:name).join(", ") %>
+              </td>
+              <td style="border: 1px solid #ddd; padding: 8px;">
+                <% task.comments.each do |comment| %>
+                  <li>
+                    <strong><%= comment.user.name.present? ? comment.user.name : comment.user.email  %>:</strong> <%= comment.content %>
+                  </li>
+                <% end %>
               </td>
               <td style="border: 1px solid #ddd; padding: 8px;">
                 <%= link_to 'Show', task_path(task), class: "btn btn-info" %>
@@ -44,4 +57,7 @@
       <%= link_to 'New Task', new_task_path, class: 'btn btn-primary' %>
     </div>
   </body>
+<%= form_for :destroy_user_session, url: destroy_user_session_path, method: :delete do %>
+  <%= submit_tag 'Sign Out', class: 'btn btn-primary' %>
+<% end %>
 </html>
