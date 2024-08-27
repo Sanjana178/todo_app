@@ -11,10 +11,10 @@
     <div class="form-wrapper">
       <h1 class="title">Sign In</h1>
 
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
         <div class="form-group">
           <%= f.label :email, class: 'form-label' %>
-          <%= f.email_field :email, class: 'form-input' %>
+          <%= f.email_field :email, class: 'form-input', autofocus: true %>
         </div>
 
         <div class="form-group">

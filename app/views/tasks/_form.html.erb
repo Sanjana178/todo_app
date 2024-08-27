@@ -30,6 +30,27 @@
     <%= form.date_select :due_date, class: 'form-control' %>
   </div>
 
+  <h3>Comments</h3>
+  <%= form.fields_for :comments do |comment_form| %>
+    <div class="form-group">
+      <div class="form-group">
+        <%= comment_form.label :content, "Comment" %>
+        <%= comment_form.text_area :content, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <span>User : </span>
+        <%= comment_form.hidden_field :user_id, value: current_user.id %>
+        <%= comment_form.label :user_id, value: current_user.name %>  <!-- Display current user's name -->
+      </div>
+
+      <div class="form-group">
+        <%= comment_form.check_box :_destroy %>
+        <%= comment_form.label :_destroy, "Remove comment" %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="form-group">
     <%= form.label :user_ids, "Assign Users" %>
     <%= form.collection_check_boxes :user_ids, User.all, :id, :name do |b| %>
